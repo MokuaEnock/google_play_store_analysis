@@ -325,7 +325,7 @@ play-store-analysis/
 If you keep raw and processed data in separate folders, change `raw_path` and `clean_path` in the notebook's configuration cell.
 
 ---
-
+<!--
 ## Getting Started
 
 ### Prerequisites
@@ -367,7 +367,7 @@ jupyter
 
 Running the notebook regenerates `data/google_play_store_cleaned.csv` (the data source for the Tableau dashboard), `data/research_scorecard.csv`, and the charts in `images/`.
 
----
+--- -->
 
 ## Troubleshooting
 
@@ -379,7 +379,7 @@ Running the notebook regenerates `data/google_play_store_cleaned.csv` (the data 
 | Java errors on startup | Unsupported Java version | Install Java 17 or 21 for PySpark 4.x |
 | Spark errors after running the last cell | The final cell calls `spark.stop()` | Re-run the notebook from the top if you need Spark again |
 
----
+<!-- ---
 
 ## Limitations
 
@@ -402,15 +402,15 @@ Running the notebook regenerates `data/google_play_store_cleaned.csv` (the data 
 - Refresh the analysis with a more recent dataset and compare trends over time.
 - Package the cleaning pipeline as a reusable Python module with unit tests and continuous integration.
 
----
+--- -->
 
-## A Note on AI-Assisted Development
+<!-- ## A Note on AI-Assisted Development
 
 AI tools were used during this project for code suggestions, debugging the PySpark 4.x `pyarrow` failure, expanding the research questions, and drafting documentation. All AI-generated code was reviewed, tested, and modified by me, and the prompts, responses, and my changes are recorded in the notebook's appendix and in [`docs/ai_usage_log.md`](docs/ai_usage_log.md).
 
----
+--- -->
 
-## Author
+<!-- ## Author
 
 **`[Your Name]`**
 
@@ -421,4 +421,4 @@ AI tools were used during this project for code suggestions, debugging the PySpa
 
 *Built as part of `[course / program name]`.*
 
-If you found this project useful, feel free to ⭐ the repository.
+If you found this project useful, feel free to ⭐ the repository. -->
