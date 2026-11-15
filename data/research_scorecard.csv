@@ -1,0 +1,9 @@
+RQ,question,effect size,answer (generated)
+RQ1,Do apps with more installs get more reviews?,very strong,Very strong positive relationship: Spearman rho = 0.968 (95% CI 0.966 to 0.969); each 10x more installs goes with about 8.2x more reviews (R² = 0.92); positive in 100% of categories.
+RQ2,Which categories have the best ratings?,small,"Highest median ratings: Events, Books & Reference, Health & Fitness (4.5); lowest: Tools, Maps & Navigation, Dating (4.1). Category explains 2.5% of rating rank variance (small effect)."
+RQ3,Do paid apps earn higher ratings than free apps?,negligible,Paid apps average +0.10 rating points vs. free (95% CI +0.05 to +0.14); Cliff's delta 0.16 (small); after category adjustment 0.14 (negligible).
+RQ4,How does app size relate to installs and ratings?,weak,Size vs. installs: Spearman rho = 0.31 (weak positive); 1M+ install share peaks in the 60+ MB band; size vs. rating rho = 0.05.
+RQ5,How does price relate to installs?,large,"Free apps have a median of 100,000 installs vs. 1,000 for paid (Cliff's delta 0.50, large); among paid apps price vs. installs rho = 0.13."
+RQ6,How do installs and ratings vary with update recency?,weak,Days since update vs. installs rho = -0.33 (weak); vs. rating rho = -0.18; 78% of 1M+ apps were updated in the last 180 days vs. 49% of <10K apps.
+RQ7,Which content-rating groups and genres dominate or are crowded?,descriptive,'Everyone' holds 82% of apps; top 5 genres hold 29% of apps (HHI 0.036 vs. 0.021 if even); genre size vs. median installs rho = -0.28.
+RQ8,Which relationships survive in a combined model?,large,Adding installs lifts R² for reviews from 0.12 to 0.91 (+0.79); all other attributes add only +0.02. Attributes plus category explain 0.21 of install variation (top: size (log)).
