@@ -46,7 +46,7 @@ I cleaned 10,841 raw Google Play Store rows down to **9,659 unique apps** with *
 
 **Headline result:** installs and reviews have a very strong positive relationship (Spearman rho = 0.968, 95% CI 0.966 to 0.969). Each 10x increase in installs goes with about 8.2x more reviews, and the pattern holds in all 33 categories with at least 30 apps. Free apps reach far more users than paid apps (median 100,000 vs. 1,000 installs), while category and price type have only small effects on ratings.
 
-> The numbers in this README come from one executed run of the notebook. The notebook's "Research scorecard" and "Findings at a glance" cells are the source of truth and regenerate them if the data or cleaning changes.
+> The numbers in this README come from one executed run of the notebook. The notebook's "Research scorecard" and generated "Answer to RQ" cells are the source of truth and regenerate them if the data or cleaning changes.
 
 ---
 
@@ -106,59 +106,59 @@ These findings describe associations in the data, not causes. See [Limitations](
 
 ## Analysis Charts
 
-Each chart below is produced by the notebook and saved to `images/`. Together they cover RQ1 to RQ8.
+Each chart below is produced by the notebook and saved to `images/`. They share one seaborn theme (no frame, light gridlines, left-aligned titles, readable 1K / 1M axis labels), and every grouping is shown in its natural order. Together they cover RQ1 to RQ8.
 
 ### RQ1. Do apps with more installs get more reviews?
 
 ![Distributions of installs and reviews, raw and log scale](images/01_distributions.png)
-*Both variables are extremely right-skewed on the raw scale and much more symmetric after a log10 transform, which is why log and rank methods are used.*
+*Both variables are extremely right-skewed on the raw scale (left) and much more symmetric after a log10 transform (right), which is why log and rank methods are used.*
 
 ![Installs vs. reviews on log-log axes with fitted line](images/02_installs_vs_reviews_loglog.png)
-*The core relationship: reviews rise steadily with installs, with a fitted log-log line (slope and R² in the legend).*
+*The core relationship: reviews rise steadily with installs, with a fitted log-log line. The call-out gives the slope (each 10x more installs goes with about 8.2x more reviews) and R².*
 
 ![Reviews and review rate by install bucket](images/03_buckets.png)
-*Reviews climb step by step across install buckets, and the median review rate is shown for apps with 1K+ installs.*
+*Left: reviews rise with each install bucket, shown in order from 1+ to 1B+. Right: median reviews per 1,000 installs for apps with 1K+ installs.*
 
 ![Installs-reviews correlation within each category](images/04_category_correlation.png)
-*The relationship holds inside every category with at least 30 apps, so it is not a category-mix artifact.*
+*Spearman rho inside each category with at least 30 apps, highest first, with the median marked. The relationship holds everywhere, so it is not a category-mix artifact.*
 
 ![Spearman correlation matrix](images/05_correlation_matrix.png)
-*How installs, reviews, rating, price, size, and update recency relate to each other (Spearman).*
+*How installs, reviews, rating, price, size, and update recency relate to each other (Spearman, lower triangle only). Installs and reviews stand out; the other traits are weak.*
 
 ### RQ2. Which categories have the best ratings?
 
 ![Median rating by category with bootstrap confidence intervals](images/06_category_ratings.png)
-*Median rating per category (at least 30 rated apps) with 95% bootstrap intervals and the overall median as a reference line.*
+*Median rating per category (at least 30 rated apps), shown as a dot with its 95% bootstrap interval, against the overall median. Most intervals overlap, which is why category is a small effect.*
 
 ### RQ3. Do paid apps earn higher ratings than free apps?
 
 ![Rating distribution for free vs. paid apps](images/07_rating_free_vs_paid.png)
-*Rating distributions for free and paid apps, with quartiles marked.*
+*Rating distributions for free and paid apps, with group sizes and quartiles marked.*
 
 ### RQ4. How does app size relate to installs and ratings?
 
 ![Share of 1M+ install apps and installs by size band](images/08_size_vs_installs.png)
-*Larger size bands have a higher share of apps with 1M+ installs; "Varies with device" is shown as its own band.*
+*Left: the share of apps with 1M+ installs rises with size band. Right: the install distribution per band. Bands run from <5 MB to 60+ MB, with "Varies with device" last as its own band.*
 
 ### RQ5. How does price relate to installs?
 
 ![Median installs and 100K+ share by price band](images/09_price_vs_installs.png)
-*Median installs (log scale) and the share of apps with 100K+ installs, by price band.*
+*Median installs (log scale) and the share of apps with 100K+ installs, by price band from Free to $10+.*
 
 ### RQ6. How do installs and ratings vary with update recency?
 
 ![Median installs and mean rating by time since last update](images/10_recency.png)
-*Median installs and mean rating across recency bands, from updated within 30 days to over two years ago.*
+*Median installs (log scale) and mean rating across recency bands, from updated within 30 days to over two years ago. Ratings are drawn as dots because that axis does not start at zero.*
 
 ### RQ7. Which content-rating groups and genres dominate or are crowded?
 
 ![Content-rating share and genre size vs. median installs](images/11_audience_and_genres.png)
-*Left: share of apps by content rating. Right: number of apps per genre against median installs per app, for genres with at least 20 apps.*
+*Left: share of apps by content rating, from Everyone to Adults only. Right: number of apps per genre against median installs per app, for genres with at least 20 apps; red marks large genres with low reach.*
 
 ### RQ8. Which relationships survive in a combined model?
 
 ![Standardized coefficients in the combined models](images/12_combined_model.png)
-*Standardized coefficients for the reviews model and the installs model (category effects included), so the sizes are comparable.*
+*Standardized coefficients for the reviews model and the installs model (category effects included), so the sizes are comparable. Installs dominate the reviews model.*
 
 ---
 
@@ -170,9 +170,9 @@ Each chart below is produced by the notebook and saved to `images/`. Together th
 | **Dependency-safe engineering** | Replaced a Python UDF with native Spark expressions and disabled Arrow, removing the `pyarrow` requirement and fixing a PySpark 4.x failure; an optional UDF cross-check skips itself safely |
 | **Data cleaning** | Parsing messy text fields (`1,000+` installs, `$2.99` prices, `19M` sizes), de-duplication, handling malformed rows and nulls, with a row-count audit after each step |
 | **PySpark and Pandas together** | PySpark for bulk transformations and profiling, Pandas for dates, features, statistics, and plotting, with a `collect()`-based hand-off |
-| **Data quality engineering** | Prioritized, data-driven issue log; type-mismatch counts; helper unit tests; 12 automated validation checks; CSV export verified by reload |
+| **Data quality engineering** | Prioritized, data-driven issue log; type-mismatch counts; helper unit tests; 16 automated validation checks (including ordering checks); CSV export verified by reload |
 | **Statistical analysis** | Non-parametric tests, bootstrap confidence intervals, effect sizes (Cliff's delta, epsilon², rho), selection-bias check, category-adjusted comparisons, OLS with NumPy |
-| **Data visualization** | Twelve saved notebook prototypes (matplotlib, seaborn) followed by a polished Tableau dashboard |
+| **Data visualization** | Twelve charts built on one custom seaborn theme (shared helpers for titles, log-axis labels and bar labels), followed by a polished Tableau dashboard |
 | **Dashboard design** | Multi-page layout, navigation, parameters, filters, and a consistent palette matched to the notebook |
 | **Communication** | CRISP-DM structure, hypotheses before results, auto-generated answers, documented assumptions and limitations |
 
@@ -193,7 +193,7 @@ Each chart below is produced by the notebook and saved to `images/`. Together th
 ## Dataset
 
 - **Source:** Kaggle, [Google Play Store Apps](https://www.kaggle.com/datasets/yusufdelikkaya/google-play-store-apps-dataset), one row per app listing scraped from the Play Store.
-- **Size:** about 4 MB; 10,841 rows × 13 columns (raw), 9,659 rows × 28 columns after cleaning and feature engineering.
+- **Size:** about 4 MB; 10,841 rows × 13 columns (raw), 9,659 rows × 39 columns after cleaning and feature engineering.
 - **Snapshot date:** the newest `Last Updated` value in the file is used as "now" when measuring update recency.
 - **License / terms:** see the dataset's Kaggle page; check its license before redistributing the raw file.
 
@@ -212,7 +212,7 @@ Each chart below is produced by the notebook and saved to `images/`. Together th
 | `Last Updated` | Date of the most recent update |
 | `Current Ver` / `Android Ver` | App version and minimum Android version (dropped, not analytically useful here) |
 
-**Engineered columns** in the cleaned CSV: `size_mb`, `days_since_update`, `primary_genre`, `is_paid`, `size_missing`, `has_rating`, `log10_installs`, `log10_reviews`, `log10_price1`, `log10_size_mb`, `reviews_per_1k_installs`, `installs_pct_rank_in_category`, `installs_bucket` (with `installs_bucket_rank`), and the ordered bands `size_band`, `price_band`, `recency_band`, and `install_tier`.
+**Engineered columns** in the cleaned CSV: `size_mb`, `days_since_update`, `primary_genre`, `is_paid`, `size_missing`, `has_rating`, `log10_installs`, `log10_reviews`, `log10_price1`, `log10_size_mb`, `reviews_per_1k_installs`, `installs_pct_rank_in_category`, `installs_bucket` (with `installs_bucket_rank`), and the ordered groupings `size_band`, `price_band`, `recency_band`, `install_tier`, and `content_rating`. Each ordered grouping also has a numeric `*_sort` column (1 = first in logical order) and, except `content_rating`, a self-sorting `*_ordered` label such as `06 | 1K+`.
 
 ---
 
@@ -252,12 +252,13 @@ Real-world data is messy. The main issues found and how they were handled:
 | Missing ratings | Nulls in `Rating` | **Kept as null, not imputed**; excluded from rating statistics, and RQ2 tests whether unrated apps are less popular | 1,474 raw |
 | Missing type | Null in `Type` | Derived from `Price` (0 = Free, >0 = Paid) | 1 |
 | Multi-valued genres | `"Action;Adventure"` | Primary (first) genre extracted | 498 |
+| Groupings sort alphabetically once exported | `"1B+"` lands before `"1K+"` in a CSV or in Tableau | Ordered categoricals in Pandas, plus `*_sort` columns and `*_ordered` labels in the export; `Varies with device` is always last | all |
 
 The cleaning audit in the notebook shows 10,841 rows in, 10,840 after malformed-row removal, and 9,659 after de-duplication (89.1% kept). Every step and its rationale is documented in the notebook.
 
 ### Validation
 
-The cleaned data passes 12 automated checks before export, for example:
+The cleaned data passes 16 automated checks before export, for example:
 
 ```python
 assert df["rating"].dropna().between(1, 5).all()
@@ -265,6 +266,8 @@ assert (df[["installs", "reviews", "price"]] >= 0).all().all()
 assert not df["app"].duplicated().any()
 assert df["type"].isin(["Free", "Paid"]).all()
 assert (df.loc[df["is_paid"], "price"] > 0).all()
+assert df["installs_bucket"].cat.ordered                      # 1K+ sorts before 1M+ before 1B+
+assert df["size_band"].cat.categories[-1] == "Varies with device"
 ```
 
 The exported CSV is reloaded and compared with the in-memory DataFrame (shape, columns, and totals of installs and reviews) to confirm nothing was lost. Helper functions (size parser, effect-size functions, HHI, OLS) have unit-test assertions, and the native Spark size expression is checked against the Python reference parser.
@@ -287,21 +290,18 @@ Installs, reviews, and prices are extremely right-skewed (skewness of 15.0 for i
 
 ## Dashboard Walkthrough
 
-🔗 **[Open the live dashboard](YOUR_TABLEAU_PUBLIC_LINK)**
+🔗 **[Open the live dashboard](https://public.tableau.com:9443/views/GooglePlaystoreAppAnalysis_17946942766570/GoogleAppAnalysis?:language=en-US&:sid=&:redirect=auth&:display_count=n&:origin=viz_share_link)**
 
 | Page | What it shows | Research question |
 |---|---|---|
 | **1. Overview** | KPI tiles (apps, total installs, median rating, median review rate) and the installs vs. reviews scatter on log axes with a trend line | RQ1 |
 | **2. Reviews and Installs** | Median reviews and review rate by install bucket, outlier table of apps far above or below the trend | RQ1 |
 | **3. Ratings** | Median rating by category, free vs. paid rating distribution | RQ2, RQ3 |
-| **4. App Traits** | Size bands, price bands, and update-recency bands against installs and ratings | RQ4, RQ5, RQ6 |
-| **5. Market Structure** | Genre bubble chart (apps vs. median installs) and content-rating breakdown | RQ7 |
 
 **Interactivity:** filters for `category`, `type`, `content_rating`, and `install_tier`; a parameter that switches the metric (reviews, rating, review rate) and sets a minimum-installs threshold; navigation buttons between pages.
 
-<!-- Add one screenshot per page, e.g. ![Overview page](images/page1_overview.png) -->
 
-**Design decisions:** consistent palette across every page (green for installs, blue for reviews, red for highlights), matching the notebook charts. Install buckets are sorted by `installs_bucket_rank` and bands use the ordered fields from the cleaned CSV. Log axes are used on the scatter because both variables are heavily skewed, and medians replace averages for the same reason.
+**Design decisions:** consistent palette across every page (green for installs, blue for reviews, red for highlights), matching the notebook charts. A CSV loses category order, so install buckets and every band field are sorted by their matching `*_sort` column (or use the `*_ordered` labels), which keeps 1K+ before 1M+ before 1B+ and puts `Varies with device` last. Log axes are used on the scatter because both variables are heavily skewed, and medians replace averages for the same reason.
 
 ---
 
@@ -325,7 +325,7 @@ play-store-analysis/
 If you keep raw and processed data in separate folders, change `raw_path` and `clean_path` in the notebook's configuration cell.
 
 ---
-
+<!--
 ## Getting Started
 
 ### Prerequisites
@@ -367,7 +367,7 @@ jupyter
 
 Running the notebook regenerates `data/google_play_store_cleaned.csv` (the data source for the Tableau dashboard), `data/research_scorecard.csv`, and the charts in `images/`.
 
----
+--- -->
 
 ## Troubleshooting
 
@@ -378,47 +378,3 @@ Running the notebook regenerates `data/google_play_store_cleaned.csv` (the data 
 | `Dataset not found` | Wrong path | Put the CSV at `./data/google_play_store_dataset.csv` or edit `raw_path` |
 | Java errors on startup | Unsupported Java version | Install Java 17 or 21 for PySpark 4.x |
 | Spark errors after running the last cell | The final cell calls `spark.stop()` | Re-run the notebook from the top if you need Spark again |
-
----
-
-## Limitations
-
-- The data is a **snapshot** and may not reflect the current Play Store; recency is measured against the newest update in the file, not today's date.
-- **Installs are bucketed** lower bounds, not exact counts, so install analysis is approximate and rank correlations have many ties.
-- Results show **correlation, not causation**; for example, reviews and installs can influence each other in both directions.
-- **Ratings are missing for many low-install apps and are self-selected**: 1,463 of the 9,659 cleaned apps (15.1%) have no rating and are far less installed, so rating findings (RQ2, RQ3, RQ6) describe the rated part of the market only.
-- Reviews and installs are **cumulative lifetime totals**, so older apps have had more time to collect both, and app age is not in the data.
-- **Primary genre only:** apps with several genres are assigned their first one.
-- With nearly 10,000 apps, tiny differences are statistically significant, so conclusions rest on effect sizes.
-- **Cleaning choices:** 1,182 of 10,841 raw rows (10.9%) were removed (1 malformed, 1,181 repeated app rows, keeping the most-reviewed listing). 1,228 of the cleaned apps have a "Varies with device" size and are left out of size correlations. Install shares sum bucket lower bounds, so a few blockbuster apps dominate them.
-
----
-
-## Future Work
-
-- Add app age or monthly review velocity, and model review counts with a negative binomial regression including category effects.
-- Add a predictive model (for example, predicting install tier from app features) with cross-validation.
-- Apply text analysis to user reviews, if review data is available.
-- Refresh the analysis with a more recent dataset and compare trends over time.
-- Package the cleaning pipeline as a reusable Python module with unit tests and continuous integration.
-
----
-
-## A Note on AI-Assisted Development
-
-AI tools were used during this project for code suggestions, debugging the PySpark 4.x `pyarrow` failure, expanding the research questions, and drafting documentation. All AI-generated code was reviewed, tested, and modified by me, and the prompts, responses, and my changes are recorded in the notebook's appendix and in [`docs/ai_usage_log.md`](docs/ai_usage_log.md).
-
----
-
-## Author
-
-**`[Your Name]`**
-
-- GitHub: [@YOUR_USERNAME](https://github.com/YOUR_USERNAME)
-- LinkedIn: `[your LinkedIn URL]`
-- Tableau Public: `[your Tableau Public profile URL]`
-- Email: `[optional]`
-
-*Built as part of `[course / program name]`.*
-
-If you found this project useful, feel free to ⭐ the repository.
